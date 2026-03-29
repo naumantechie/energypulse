@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+    provider = "prisma-client-js" 
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+model Country {
+    id            String          @id @default(cuid())
+    code          String          @unique
+    name          String
+    continent     String
+    population    BigInt
+    energyRecords EnergyRecord[] 
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+}
+
+model EnergyRecord {
+    id               String   @id @default(cuid())
+    countryId        String
+    country          Country  @relation(fields: [countryId], references: [id])
+    year             Int
+    solarGwh         Float
+    windGwh          Float
+    HydroGwh         Float
+    nuclearGwh       Float
+    fossilGwh        Float
+    totalGwh         Float
+    renewablePercent Float
+    carbonIntensity  Float
+    createdAt        DateTime  @default(now())
+
+    @@unique([countryId, year])
+    @@index([countryId])
+    @@index([year])
+}
+
+model LiveGrid {
+    id               String @id @default(cuid())
+    countryCode      String @unique
+    carbonIntensity  Float
+    renewablePercent Float
+    fossilPercent    Float
+    syncedAt         DateTime @default(now())
+
+    @@index([countryCode])
+}
