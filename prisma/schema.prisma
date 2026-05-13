@@ -18,7 +18,7 @@ model Country {
     code          String          @unique
     name          String
     continent     String
-    population    BigInt
+    population    Int
     energyRecords EnergyRecord[] 
     createdAt     DateTime        @default(now())
     updatedAt     DateTime        @updatedAt
