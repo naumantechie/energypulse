@@ -2,7 +2,7 @@ import { prisma } from './prisma';
 
 // Countries
 
-export async function getAllCountires() {
+export async function getAllCountries() {
     return prisma.country.findMany({
         orderBy: { name: 'asc' },
     });
