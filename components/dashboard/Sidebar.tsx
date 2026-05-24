@@ -1,7 +1,7 @@
 'use-client';
 
 import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Globe, Map, BarChart3, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
