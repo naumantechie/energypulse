@@ -1,3 +1,5 @@
+'use client'; // remove it later
+
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { TopBar } from '@/components/dashboard/TopBar';
 
