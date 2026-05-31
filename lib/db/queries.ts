@@ -90,3 +90,40 @@ export async function getAllLiveGrids() {
         orderBy: { renewablePercent: 'desc' },
     });
 }
+
+// Global trends
+
+export async function getGlobalTrends() {
+    const records = await prisma.energyRecord.groupBy({
+        by: ['year'],
+        _sum: {
+            solarGwh: true,
+            windGwh: true,
+            hydroGwh: true,
+            nuclearGwh: true,
+            fossilGwh: true,
+            totalGwh: true,
+        },
+        orderBy: { year: 'asc' },
+    });
+
+    return records.map((r) => {
+        const total = r._sum.totalGwh ?? 0;
+        const renewable =
+            (r._sum.solarGwh ?? 0) +
+            (r._sum.windGwh ?? 0) +
+            (r._sum.hydroGwh ?? 0) +
+            (r._sum.nuclearGwh ?? 0);
+
+        return {
+            year: r.year,
+            renewablePercent:
+                total > 0
+                    ? parseFloat(((renewable / total) * total).toFixed(1))
+                    : 0,
+            solarTWh: parseFloat(((r._sum.solarGwh ?? 0) / 1000).toFixed(1)),
+            windTWh: parseFloat(((r._sum.windGwh ?? 0) / 1000).toFixed(1)),
+            hydroTWh: parseFloat(((r._sum.hydroGwh ?? 0) / 1000).toFixed(1)),
+        };
+    });
+}
