@@ -3,9 +3,9 @@ export interface Country {
     code: string;
     name: string;
     continent: string;
-    population: string;
-    createdAt: string;
-    updatedAt: string;
+    population: number;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface EnergyRecord {

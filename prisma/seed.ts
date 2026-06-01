@@ -268,7 +268,7 @@ async function main() {
                     year: record.year,
                     solarGwh: record.solarGwh,
                     windGwh: record.windGwh,
-                    HydroGwh: record.hydroGwh,
+                    hydroGwh: record.hydroGwh,
                     nuclearGwh: record.nuclearGwh,
                     fossilGwh: record.fossilGwh,
                     totalGwh: total,
