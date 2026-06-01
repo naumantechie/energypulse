@@ -1,13 +1,35 @@
+import { GlobalTrendChart } from '@/components/charts/GlobalTrendChart';
+import { TopCountriesChart } from '@/components/charts/TopCountriesChart';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getAllCountries } from '@/lib/db/queries';
+import {
+    getAllCountries,
+    getGlobalStats,
+    getTopRenewableCountries,
+} from '@/lib/db/queries';
 import { Globe, Sun, Wind, Zap } from 'lucide-react';
 import { Suspense } from 'react';
 
 export const revalidate = 3600;
 
 async function DashboardContent() {
-    const countries = await getAllCountries();
+    const [countries, topCountries, globalStats] = await Promise.all([
+        getAllCountries(),
+        getTopRenewableCountries(5),
+        getGlobalStats(),
+    ]);
+
+    const totalRenewableGwh = globalStats
+        ? (globalStats._sum.solarGwh ?? 0) +
+          (globalStats._sum.windGwh ?? 0) +
+          (globalStats._sum.hydroGwh ?? 0)
+        : 0;
+
+    const totalGwh = globalStats?._sum.totalGwh ?? 0;
+    const globalRenewablePercent =
+        totalGwh > 0
+            ? ((totalRenewableGwh / totalGwh) * 100).toFixed(1)
+            : 'N/A';
 
     return (
         <div className="space-y-6">
@@ -30,24 +52,24 @@ async function DashboardContent() {
                     trendValue="+3 this month"
                 />
                 <StatCard
-                    title="Avg Renewable %"
-                    value="38.4%"
+                    title="Global Renewable %"
+                    value={`${globalRenewablePercent}%`}
                     subtitle="Global average"
                     icon={Zap}
                     trend="up"
                     trendValue="+2.1% YoY"
                 />
                 <StatCard
-                    title="Solar Capacity"
-                    value="1.2 TW"
+                    title="Total Solar"
+                    value={`${((globalStats?._sum.solarGwh ?? 0) / 1000).toFixed(0)} TWh`}
                     subtitle="Global installed"
                     icon={Sun}
                     trend="up"
                     trendValue="+18% YoY"
                 />
                 <StatCard
-                    title="Wind Capacity"
-                    value="899 GW"
+                    title="Total Wind"
+                    value={`${((globalStats?._sum.windGwh ?? 0) / 1000).toFixed(0)} TWh`}
                     subtitle="Global installed"
                     icon={Wind}
                     trend="up"
@@ -56,10 +78,8 @@ async function DashboardContent() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-col-2 gap-4">
-                <div className="lg:col-span-2 h-64 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground text-sm">
-                    Charts will populate once energy records are added via the
-                    sync job
-                </div>
+                <TopCountriesChart data={topCountries} />
+                <GlobalTrendChart />
             </div>
         </div>
     );
