@@ -1,3 +1,4 @@
+import { LiveGridClient } from '@/components/dashboard/LiveGridClient';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAllLiveGrids } from '@/lib/db/queries';
 import { Suspense } from 'react';
@@ -6,7 +7,7 @@ export const revalidate = 300; // after every 5 mins
 
 async function LiveGridContent() {
     const grids = await getAllLiveGrids();
-    // return <LiveGridClient />;
+    return <LiveGridClient initialData={grids} />;
 }
 
 export default function LiveGridPage() {

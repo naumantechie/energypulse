@@ -2,7 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Globe, Map, BarChart3, Zap } from 'lucide-react';
+import {
+    LayoutDashboard,
+    Globe,
+    Map,
+    BarChart3,
+    Zap,
+    Activity,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -10,6 +17,7 @@ const navItems = [
     { label: 'Countries', href: '/countries', icon: Globe },
     { label: 'World Map', href: '/map', icon: Map },
     { label: 'Compare', href: 'compare', icon: BarChart3 },
+    { label: 'Live Grid', href: '/live', icon: Activity },
 ];
 
 export function Sidebar() {
