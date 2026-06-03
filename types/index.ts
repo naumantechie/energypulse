@@ -23,13 +23,13 @@ export interface EnergyRecord {
     createdAt: string;
 }
 
-export interface liveGrid {
+export interface LiveGrid {
     id: string;
     countryCode: string;
     carbonIntensity: number;
     renewablePercent: number;
     fossilPercent: number;
-    syncedAt: string;
+    syncedAt: Date;
 }
 
 export interface GlobalStats {
