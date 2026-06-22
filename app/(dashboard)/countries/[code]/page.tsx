@@ -1,5 +1,6 @@
 import { RenewableBreakdownChart } from '@/components/charts/RenewableBreakdownChart';
 import { RenewableTrendChart } from '@/components/charts/RenewableTrendChart';
+import { ExportButton } from '@/components/dashboard/ExportButton';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,13 @@ export default async function CountryDetailPage({ params }: Props) {
                         {country.population.toLocaleString()}
                     </p>
                 </div>
+
+                {country.energyRecords.length > 0 && (
+                    <ExportButton
+                        country={country}
+                        records={country.energyRecords}
+                    />
+                )}
             </div>
 
             {latestRecord ? (
